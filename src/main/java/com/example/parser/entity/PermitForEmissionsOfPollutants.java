@@ -1,4 +1,4 @@
-package com.example.Parser.entity;
+package com.example.parser.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

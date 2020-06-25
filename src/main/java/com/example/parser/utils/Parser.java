@@ -1,38 +1,37 @@
-package com.example.Parser.bootstrap;
+package com.example.parser.utils;
 
-import com.example.Parser.entity.PermitForEmissionsOfPollutants;
-
-import com.example.Parser.repository.PermitRepository;
-
+import com.example.parser.entity.PermitForEmissionsOfPollutants;
+import com.example.parser.repository.PermitRepository;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.stereotype.Component;
+import org.json.simple.parser.ParseException;
 
 import java.io.FileReader;
+import java.io.IOException;
+import java.util.Date;
 import java.util.Iterator;
 
+public class Parser {
 
-@Component
-public class Test implements CommandLineRunner  {
-
-    private static final String filePath = "C:\\Users\\Любомир\\Downloads\\dozvoli-na-vikidi-v-atmosferu-onovlenii.json";
+   // private static final String filePath = "C:\\Users\\Любомир\\Downloads\\dozvoli-na-vikidi-v-atmosferu-onovlenii.json";
     private PermitForEmissionsOfPollutants permit;
+    private PermitForEmissionsOfPollutants permit2;
     private final PermitRepository permitRepository;
+    private long time;
+    private Date date;
+    private int counter;
 
-    public Test(PermitRepository permitRepository) {
+    public Parser(PermitRepository permitRepository) {
         this.permitRepository = permitRepository;
     }
 
-    @Override
-    public void run(String... args) throws Exception {
+    public void parser(String filePath) throws IOException, ParseException {
+
+        long start = System.currentTimeMillis();
         FileReader reader = new FileReader(filePath);
         JSONParser jsonParser = new JSONParser();
         JSONArray jsonArray = (JSONArray) jsonParser.parse(reader);
-
-//        for(int i=0; i<jsonArray.size(); i++)
-//            System.out.println("The " + i + " element of the array: " + jsonArray.get(i));
 
         Iterator i = jsonArray.iterator();
 
@@ -40,6 +39,7 @@ public class Test implements CommandLineRunner  {
 
             JSONObject innerObj = (JSONObject) i.next();
             permit = new PermitForEmissionsOfPollutants();
+            permit2 = new PermitForEmissionsOfPollutants();
 
             permit.setEdrpou(String.valueOf(innerObj.get("edrpou")));
             permit.setNumber(String.valueOf(innerObj.get("number")));
@@ -48,17 +48,27 @@ public class Test implements CommandLineRunner  {
             permit.setValidity(String.valueOf(innerObj.get("validity")));
             permit.setLegal_address(String.valueOf(innerObj.get("legal_address")));
             permit.setActual_address(String.valueOf(innerObj.get("actual_address")));
+            counter++;
+            permit2 = permitRepository.findById(counter);
 
-            permitRepository.save(permit);
-//            System.out.println("edrpou "+ innerObj.get("edrpou") +
-//
-//                    " number " + innerObj.get("number") +
-//                    " name "  + innerObj.get("name") +
-//                    " data_type " + innerObj.get("data_type") +
-//                    " validity " + innerObj.get("validity") +
-//                    " legal_address " + innerObj.get("legal_address") +
-//                    "actual_address " + innerObj.get("actual_address")+"\n\n" );
+            if(!permit.equals(permit2)){
+                permitRepository.save(permit);
+            }
+
         }
-    }
-}
+        long end = System.currentTimeMillis();
+        time = end - start;
+        date = new Date();
 
+        System.out.println(counter);
+
+
+
+
+
+
+    }
+
+
+
+}
