@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class Test implements CommandLineRunner  {
 
-    private static final String filePath = "C:\\Users\\Shynkaruk\\Downloads\\dozvoli-na-vikidi-v-atmosferu-onovlenii.json";
+    private static final String filePath = "/Users/kristina/Downloads/dozvoli-na-vikidi-onovlenii.json";
 //    private PermitForEmissionsOfPollutants permit;
     private final PermitRepository permitRepository;
 

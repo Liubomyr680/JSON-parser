@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 
 @Entity
@@ -39,4 +40,17 @@ public class PermitForEmissionsOfPollutants {
 
     @Column(name = "actual_address")
     private String actual_address;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PermitForEmissionsOfPollutants that = (PermitForEmissionsOfPollutants) o;
+        return Objects.equals(number, that.number);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(number);
+    }
 }
