@@ -20,9 +20,9 @@ public class Parser {
     private final PermitRepository permitRepository;
     private float time;
     private Date date;
-    private int File_counter;
-    private int DB_counter;
-    private static Logger log = LoggerFactory.getLogger(Parser.class);
+    private int fileCounter;
+    private int dataBaseCounter;
+    private static final Logger log = LoggerFactory.getLogger(Parser.class);
 
     public Parser(PermitRepository permitRepository) {
         this.permitRepository = permitRepository;
@@ -53,7 +53,7 @@ public class Parser {
             permit.setLegal_address(String.valueOf(innerObj.get("legal_address")));
             permit.setActual_address(String.valueOf(innerObj.get("actual_address")));
             JsonList.add(permit);
-            File_counter++;
+            fileCounter++;
         }
 
         Set<PermitForEmissionsOfPollutants> union = new HashSet(JsonList);
@@ -61,17 +61,16 @@ public class Parser {
 
         for (PermitForEmissionsOfPollutants k : union) {
             permitRepository.save(k);
-            DB_counter++;
+            dataBaseCounter++;
         }
 
         long end = System.currentTimeMillis();
         time = TimeUnit.MILLISECONDS.toSeconds(end - start);
         date = new Date();
 
-        log.info("\n1) Затрачений час на обробку файлу " + time + " секунд" +
-                "\n2) Дата коли файл був оброблений " + date +
-                "\n3) Скільки записів вичитало з файлу " + File_counter +
-                "\n4) Скільки нових записів додало у базу " + DB_counter +
-                "\n");
+        log.info("\n1) Time spent processing the file " + time + " seconds");
+        log.info("\n2) Date the file was processed " + date);
+        log.info("\n3) How many records were read from the file " + fileCounter);
+        log.info("\n4) How many new records have been added to the database " + dataBaseCounter);
     }
 }
