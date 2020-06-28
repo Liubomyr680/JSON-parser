@@ -68,9 +68,9 @@ public class Parser {
         time = TimeUnit.MILLISECONDS.toSeconds(end - start);
         date = new Date();
 
-        log.info("1) Time spent processing the file " + time + " seconds");
-        log.info("2) Date the file was processed " + date);
-        log.info("3) How many records were read from the file " + fileCounter);
-        log.info("4) How many new records have been added to the database " + dataBaseCounter);
+        log.info(String.format("1) Time spent processing the file (%s) seconds",time));
+        log.info(String.format("2) Date the file was processed %s", date));
+        log.info(String.format("3) How many records were read from the file %s", fileCounter));
+        log.info(String.format("4) How many new records have been added to the database %s", dataBaseCounter));
     }
 }
