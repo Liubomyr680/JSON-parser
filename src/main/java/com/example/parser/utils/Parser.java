@@ -9,8 +9,7 @@ import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -28,11 +27,14 @@ public class Parser {
         this.permitRepository = permitRepository;
     }
 
-    public void parser(String filePath) throws IOException, ParseException {
+    public void parser() throws IOException, ParseException {
+
+        FileDownload fileDownload = new FileDownload();
+        fileDownload.download();
 
         long start = System.currentTimeMillis();
 
-        FileReader reader = new FileReader(filePath);
+        FileReader reader = new FileReader(fileDownload.getTmp());
         JSONParser jsonParser = new JSONParser();
         JSONArray jsonArray = (JSONArray) jsonParser.parse(reader);
 
