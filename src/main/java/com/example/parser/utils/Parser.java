@@ -2,29 +2,46 @@ package com.example.parser.utils;
 
 import com.example.parser.entity.PermitForEmissionsOfPollutants;
 import com.example.parser.repository.PermitRepository;
+import com.example.parser.service.PermitService;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Bean;
 
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+
 public class Parser {
 
     private PermitForEmissionsOfPollutants permit;
-    private final PermitRepository permitRepository;
+    private PermitService permitService;
     private float time;
     private Date date;
     private int fileCounter;
     private int dataBaseCounter;
     private static final Logger log = LoggerFactory.getLogger(Parser.class);
 
-    public Parser(PermitRepository permitRepository) {
-        this.permitRepository = permitRepository;
+    private String str;
+
+    public String getStr() {
+        return str = "Time = " + time +"\n"
+                + "Date = " + date + "\n"
+                + "Records from file " + fileCounter +"\n"
+                + "Records saved to DB " + dataBaseCounter+"\n";
+    }
+
+
+
+    public Parser() {
+    }
+
+    public Parser(PermitService permitService){
+        this.permitService = permitService;
     }
 
     public void parser() throws IOException, ParseException {
@@ -38,7 +55,7 @@ public class Parser {
         JSONParser jsonParser = new JSONParser();
         JSONArray jsonArray = (JSONArray) jsonParser.parse(reader);
 
-        List<PermitForEmissionsOfPollutants> BD_list = new ArrayList<>(permitRepository.findAll());
+        List<PermitForEmissionsOfPollutants> BD_list = new ArrayList<>(permitService.getAll());
         List<PermitForEmissionsOfPollutants> JsonList = new LinkedList<>();
 
         Iterator i = jsonArray.iterator();
@@ -62,7 +79,7 @@ public class Parser {
         union.removeAll(BD_list);
 
         for (PermitForEmissionsOfPollutants k : union) {
-            permitRepository.save(k);
+            permitService.save(k);
             dataBaseCounter++;
         }
 
