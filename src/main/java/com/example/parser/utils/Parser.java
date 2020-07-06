@@ -9,7 +9,6 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Bean;
 
 import java.io.*;
 import java.util.*;
@@ -20,33 +19,34 @@ public class Parser {
 
     private PermitForEmissionsOfPollutants permit;
     private PermitService permitService;
+    private PermitRepository permitRepository;
     private float time;
     private Date date;
     private int fileCounter;
     private int dataBaseCounter;
     private static final Logger log = LoggerFactory.getLogger(Parser.class);
 
-    private String str;
+
+
+    //private String str;
 
     public String getStr() {
-        return str = "Time = " + time +"\n"
+        return "Time = " + time +"\n"
                 + "Date = " + date + "\n"
                 + "Records from file " + fileCounter +"\n"
                 + "Records saved to DB " + dataBaseCounter+"\n";
     }
 
-
-
     public Parser() {
     }
 
-    public Parser(PermitService permitService){
-        this.permitService = permitService;
+    public Parser(PermitRepository permitRepository){
+        this.permitRepository = permitRepository;
     }
 
-    public void parser() throws IOException, ParseException {
+    public JSONObject startParsing(String fileUrl) throws IOException, ParseException {
 
-        FileDownload fileDownload = new FileDownload();
+        FileDownload fileDownload = new FileDownload(fileUrl);
         fileDownload.download();
 
         long start = System.currentTimeMillis();
@@ -55,7 +55,7 @@ public class Parser {
         JSONParser jsonParser = new JSONParser();
         JSONArray jsonArray = (JSONArray) jsonParser.parse(reader);
 
-        List<PermitForEmissionsOfPollutants> BD_list = new ArrayList<>(permitService.getAll());
+        List<PermitForEmissionsOfPollutants> BD_list = new ArrayList<>(permitRepository.findAll());
         List<PermitForEmissionsOfPollutants> JsonList = new LinkedList<>();
 
         Iterator i = jsonArray.iterator();
@@ -91,5 +91,13 @@ public class Parser {
         log.info("2) Date the file was processed {}", date);
         log.info("3) How many records were read from the file {}", fileCounter);
         log.info("4) How many new records have been added to the database {}", dataBaseCounter);
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("Time", time);
+        jsonObject.put("Date", date);
+        jsonObject.put("File counter", fileCounter);
+        jsonObject.put("Data base counter", dataBaseCounter);
+
+        return jsonObject;
     }
 }

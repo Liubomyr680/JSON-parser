@@ -15,10 +15,12 @@ public class FileDownload {
     private int read = 0;
     private static final Logger log = LoggerFactory.getLogger(FileDownload.class);
 
-    public FileDownload() throws IOException {
+    public FileDownload(String fileUrl) throws IOException {
         buffer = new byte[1024];
         tmp = File.createTempFile("dozvoli-na-vikidi-onovlenii", ".tmp", (new File("/Users/kristina/Downloads/")));
-        fileUrl = "https://data.gov.ua/dataset/94409436-a198-4b9d-9738-844405c5df94/resource/4ca1d5a9-543f-42a5-bc8c-d6fe5650be40/download/dozvoli-na-vikidi-onovlenii.json";
+//        fileUrl = "https://data.gov.ua/dataset/94409436-a198-4b9d-9738-844405c5df94/resource/4ca1d5a9-543f-42a5-bc8c-d6fe5650be40/download/dozvoli-na-vikidi-onovlenii.json";
+        this.fileUrl = fileUrl;
+
     }
 
     public File getTmp() {

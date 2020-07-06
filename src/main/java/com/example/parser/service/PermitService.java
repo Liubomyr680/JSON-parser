@@ -2,38 +2,43 @@ package com.example.parser.service;
 
 import com.example.parser.entity.PermitForEmissionsOfPollutants;
 import com.example.parser.repository.PermitRepository;
+import com.example.parser.utils.Parser;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
-public class PermitService implements CrudService<PermitForEmissionsOfPollutants> {
-
+public class PermitService {
 
     private final PermitRepository permitRepository;
+    private Parser parser;
 
-    @Override
+    public PermitService(PermitRepository permitRepository) {
+        this.permitRepository = permitRepository;
+        parser = new Parser(permitRepository);
+    }
+
     public PermitForEmissionsOfPollutants save(PermitForEmissionsOfPollutants permitForEmissionsOfPollutants) {
         return permitRepository.save(permitForEmissionsOfPollutants);
     }
 
-    public PermitService(PermitRepository permitRepository) {
-        this.permitRepository = permitRepository;
-    }
-
-    @Override
     public List<PermitForEmissionsOfPollutants> getAll() {
         return permitRepository.findAll();
     }
 
-    @Override
     public void delete(Long id) {
         permitRepository.deleteById(id);
-
     }
 
-    @Override
     public PermitForEmissionsOfPollutants findByNumber(String number) {
         return permitRepository.findByNumber(number);
+    }
+
+    public JSONObject startParsing(String fileUrl) throws IOException, ParseException {
+
+        return parser.startParsing(fileUrl);
     }
 }
