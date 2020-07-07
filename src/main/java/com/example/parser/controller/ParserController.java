@@ -22,9 +22,14 @@ public class ParserController {
         this.permitService = permitService;
     }
 
-    @GetMapping("/start")
-    public JSONObject start() throws IOException, ParseException {
+//    @GetMapping("/start")
+//    public JSONObject start() throws IOException, ParseException {
+//
+//       return permitService.startParsing(fileUrl);
+//    }
 
-       return permitService.startParsing(fileUrl);
+    @PostMapping("/start")
+    public JSONObject start() throws IOException, ParseException {
+        return permitService.startParsing(fileUrl);
     }
 }
