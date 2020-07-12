@@ -1,5 +1,6 @@
 package com.example.parser.utils;
 
+import com.example.parser.dto.ResponseFromParsing;
 import com.example.parser.entity.PermitForEmissionsOfPollutants;
 import com.example.parser.repository.PermitRepository;
 import com.example.parser.service.PermitService;
@@ -18,24 +19,12 @@ import java.util.concurrent.TimeUnit;
 public class Parser {
 
     private PermitForEmissionsOfPollutants permit;
-    private PermitService permitService;
     private PermitRepository permitRepository;
     private float time;
     private Date date;
     private int fileCounter;
     private int dataBaseCounter;
     private static final Logger log = LoggerFactory.getLogger(Parser.class);
-
-
-
-    //private String str;
-
-    public String getStr() {
-        return "Time = " + time +"\n"
-                + "Date = " + date + "\n"
-                + "Records from file " + fileCounter +"\n"
-                + "Records saved to DB " + dataBaseCounter+"\n";
-    }
 
     public Parser() {
     }
@@ -44,9 +33,10 @@ public class Parser {
         this.permitRepository = permitRepository;
     }
 
-    public JSONObject startParsing(String fileUrl) throws IOException, ParseException {
+    public ResponseFromParsing startParsing(String fileUrl) throws IOException, ParseException {
 
         FileDownload fileDownload = new FileDownload(fileUrl);
+        ResponseFromParsing responseFromParsing = new ResponseFromParsing();
         fileDownload.download();
 
         long start = System.currentTimeMillis();
@@ -75,29 +65,28 @@ public class Parser {
             fileCounter++;
         }
 
+        responseFromParsing.setFileRecordsCounter(fileCounter);
+
         Set<PermitForEmissionsOfPollutants> union = new HashSet(JsonList);
         union.removeAll(BD_list);
 
         for (PermitForEmissionsOfPollutants k : union) {
-            permitService.save(k);
+            permitRepository.save(k);
             dataBaseCounter++;
         }
+        responseFromParsing.setDBNewRecordsCounter(dataBaseCounter);
 
         long end = System.currentTimeMillis();
         time = TimeUnit.MILLISECONDS.toSeconds(end - start);
+        responseFromParsing.setTimeSpent(time);
         date = new Date();
+        responseFromParsing.setFileDate(date);
 
         log.info("1) Time spent processing the file {} seconds", time);
         log.info("2) Date the file was processed {}", date);
         log.info("3) How many records were read from the file {}", fileCounter);
         log.info("4) How many new records have been added to the database {}", dataBaseCounter);
 
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("Time", time);
-        jsonObject.put("Date", date);
-        jsonObject.put("File counter", fileCounter);
-        jsonObject.put("Data base counter", dataBaseCounter);
-
-        return jsonObject;
+        return responseFromParsing;
     }
 }

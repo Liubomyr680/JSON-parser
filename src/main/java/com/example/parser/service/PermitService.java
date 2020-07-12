@@ -1,9 +1,9 @@
 package com.example.parser.service;
 
+import com.example.parser.dto.ResponseFromParsing;
 import com.example.parser.entity.PermitForEmissionsOfPollutants;
 import com.example.parser.repository.PermitRepository;
 import com.example.parser.utils.Parser;
-import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +37,7 @@ public class PermitService {
         return permitRepository.findByNumber(number);
     }
 
-    public JSONObject startParsing(String fileUrl) throws IOException, ParseException {
+    public ResponseFromParsing startParsing(String fileUrl) throws IOException, ParseException {
 
         return parser.startParsing(fileUrl);
     }
