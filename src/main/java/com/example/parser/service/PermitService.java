@@ -1,6 +1,6 @@
 package com.example.parser.service;
 
-import com.example.parser.dto.ResponseFromParsing;
+import com.example.parser.dto.ParsingResponse;
 import com.example.parser.entity.PermitForEmissionsOfPollutants;
 import com.example.parser.repository.PermitRepository;
 import com.example.parser.utils.Parser;
@@ -37,7 +37,7 @@ public class PermitService {
         return permitRepository.findByNumber(number);
     }
 
-    public ResponseFromParsing startParsing(String fileUrl) throws IOException, ParseException {
+    public ParsingResponse startParsing(String fileUrl) throws IOException, ParseException {
 
         return parser.startParsing(fileUrl);
     }

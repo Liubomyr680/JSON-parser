@@ -2,17 +2,13 @@ package com.example.parser.controller;
 
 
 import com.example.parser.dto.FileUrl;
-import com.example.parser.dto.ResponseFromParsing;
+import com.example.parser.dto.ParsingResponse;
 import com.example.parser.service.PermitService;
 import com.example.parser.utils.Parser;
 import lombok.SneakyThrows;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
 
 @RestController
 public class ParserController {
@@ -26,7 +22,7 @@ public class ParserController {
 
     @SneakyThrows
     @PostMapping("/start")
-    public ResponseFromParsing start(@RequestBody FileUrl fileUrl) {
+    public ParsingResponse start(@RequestBody FileUrl fileUrl) {
 
         return permitService.startParsing(fileUrl.getFileUrl());
     }

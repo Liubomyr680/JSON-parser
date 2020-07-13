@@ -1,9 +1,8 @@
 package com.example.parser.utils;
 
-import com.example.parser.dto.ResponseFromParsing;
+import com.example.parser.dto.ParsingResponse;
 import com.example.parser.entity.PermitForEmissionsOfPollutants;
 import com.example.parser.repository.PermitRepository;
-import com.example.parser.service.PermitService;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -33,10 +32,10 @@ public class Parser {
         this.permitRepository = permitRepository;
     }
 
-    public ResponseFromParsing startParsing(String fileUrl) throws IOException, ParseException {
+    public ParsingResponse startParsing(String fileUrl) throws IOException, ParseException {
 
         FileDownload fileDownload = new FileDownload(fileUrl);
-        ResponseFromParsing responseFromParsing = new ResponseFromParsing();
+        ParsingResponse responseFromParsing = new ParsingResponse();
         fileDownload.download();
 
         long start = System.currentTimeMillis();
@@ -74,7 +73,7 @@ public class Parser {
             permitRepository.save(k);
             dataBaseCounter++;
         }
-        responseFromParsing.setDBNewRecordsCounter(dataBaseCounter);
+        responseFromParsing.setDataBaseNewRecordsCounter(dataBaseCounter);
 
         long end = System.currentTimeMillis();
         time = TimeUnit.MILLISECONDS.toSeconds(end - start);
