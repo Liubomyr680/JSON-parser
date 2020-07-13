@@ -2,7 +2,6 @@ package com.example.parser.utils;
 
 import com.example.parser.dto.ParsingResponse;
 import com.example.parser.entity.PermitForEmissionsOfPollutants;
-import com.example.parser.repository.PermitRepository;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -17,41 +16,29 @@ import java.util.concurrent.TimeUnit;
 
 public class Parser {
 
-    private PermitForEmissionsOfPollutants permit;
-    private PermitRepository permitRepository;
-    private float time;
-    private Date date;
-    private int fileCounter;
-    private int dataBaseCounter;
     private static final Logger log = LoggerFactory.getLogger(Parser.class);
+    private int fileCounter;
 
-    public Parser() {
+    public int getFileCounter() {
+        return fileCounter;
     }
 
-    public Parser(PermitRepository permitRepository){
-        this.permitRepository = permitRepository;
-    }
+    public List<PermitForEmissionsOfPollutants> startParsing(String fileUrl) throws IOException, ParseException {
 
-    public ParsingResponse startParsing(String fileUrl) throws IOException, ParseException {
+        ParsingResponse parsingResponse = new ParsingResponse();
+        FileDownload.download(fileUrl);
 
-        FileDownload fileDownload = new FileDownload(fileUrl);
-        ParsingResponse responseFromParsing = new ParsingResponse();
-        fileDownload.download();
-
-        long start = System.currentTimeMillis();
-
-        FileReader reader = new FileReader(fileDownload.getTmp());
+        FileReader reader = new FileReader(FileDownload.getTmpFile());
         JSONParser jsonParser = new JSONParser();
         JSONArray jsonArray = (JSONArray) jsonParser.parse(reader);
 
-        List<PermitForEmissionsOfPollutants> BD_list = new ArrayList<>(permitRepository.findAll());
         List<PermitForEmissionsOfPollutants> JsonList = new LinkedList<>();
 
         Iterator i = jsonArray.iterator();
 
         while (i.hasNext()) {
             JSONObject innerObj = (JSONObject) i.next();
-            permit = new PermitForEmissionsOfPollutants();
+            PermitForEmissionsOfPollutants permit = new PermitForEmissionsOfPollutants();
 
             permit.setEdrpou(String.valueOf(innerObj.get("edrpou")));
             permit.setNumber(String.valueOf(innerObj.get("number")));
@@ -63,29 +50,8 @@ public class Parser {
             JsonList.add(permit);
             fileCounter++;
         }
+        parsingResponse.setFileRecordsCounter(fileCounter);
 
-        responseFromParsing.setFileRecordsCounter(fileCounter);
-
-        Set<PermitForEmissionsOfPollutants> union = new HashSet(JsonList);
-        union.removeAll(BD_list);
-
-        for (PermitForEmissionsOfPollutants k : union) {
-            permitRepository.save(k);
-            dataBaseCounter++;
-        }
-        responseFromParsing.setDataBaseNewRecordsCounter(dataBaseCounter);
-
-        long end = System.currentTimeMillis();
-        time = TimeUnit.MILLISECONDS.toSeconds(end - start);
-        responseFromParsing.setTimeSpent(time);
-        date = new Date();
-        responseFromParsing.setFileDate(date);
-
-        log.info("1) Time spent processing the file {} seconds", time);
-        log.info("2) Date the file was processed {}", date);
-        log.info("3) How many records were read from the file {}", fileCounter);
-        log.info("4) How many new records have been added to the database {}", dataBaseCounter);
-
-        return responseFromParsing;
+        return JsonList;
     }
 }

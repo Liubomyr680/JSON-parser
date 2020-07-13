@@ -5,39 +5,33 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 public class FileDownload {
 
-    private File tmp;
-    private String fileUrl;
-    private byte[] buffer;
-    private int read = 0;
+    private static File tmpFile = null;
     private static final Logger log = LoggerFactory.getLogger(FileDownload.class);
 
-    public FileDownload(String fileUrl) throws IOException {
-        buffer = new byte[1024];
-        tmp = File.createTempFile("dozvoli-na-vikidi-onovlenii", ".tmp");
-        this.fileUrl = fileUrl;
+    public static File getTmpFile() {
+        return tmpFile;
     }
 
-    public File getTmp() {
-        return tmp;
-    }
-
-    public void download() {
+    public static void download(String fileUrl) {
 
         BufferedInputStream in = null;
         BufferedOutputStream bout = null;
+        byte[] buffer = new byte[1024];
+
         try {
+            tmpFile = File.createTempFile("dozvoli-na-vikidi-onovlenii", ".tmp");
             URL url = new URL(fileUrl);
             HttpURLConnection http = (HttpURLConnection) url.openConnection();
             in = new BufferedInputStream(http.getInputStream());
-            FileOutputStream fos = new FileOutputStream(tmp);
+            FileOutputStream fos = new FileOutputStream(tmpFile);
             bout = new BufferedOutputStream(fos, 1024);
 
-            while((read =in.read(buffer,0,1024))>=0)
+            int read;
+            while((read = in.read(buffer,0,1024))>=0)
                 bout.write(buffer,0,read);
 
         } catch (IOException e) {
@@ -54,6 +48,6 @@ public class FileDownload {
         }
 
         log.info("download complete");
-        tmp.deleteOnExit();
+        tmpFile.deleteOnExit();
     }
 }

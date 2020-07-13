@@ -10,6 +10,4 @@ import java.util.List;
 @Repository
 public interface PermitRepository extends JpaRepository<PermitForEmissionsOfPollutants, Long> {
 
-      PermitForEmissionsOfPollutants findByNumber(String number);
-
 }
