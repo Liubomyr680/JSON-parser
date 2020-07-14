@@ -12,11 +12,7 @@ public class FileDownload {
     private static File tmpFile = null;
     private static final Logger log = LoggerFactory.getLogger(FileDownload.class);
 
-    public static File getTmpFile() {
-        return tmpFile;
-    }
-
-    public static void download(String fileUrl) {
+    public static File download(String fileUrl) {
 
         BufferedInputStream in = null;
         BufferedOutputStream bout = null;
@@ -49,5 +45,7 @@ public class FileDownload {
 
         log.info("download complete");
         tmpFile.deleteOnExit();
+
+        return tmpFile;
     }
 }

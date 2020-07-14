@@ -32,7 +32,7 @@ public class StartProgram {
 
         long start = System.currentTimeMillis();
         try {
-             dataFromParsing = new ArrayList<>(parser.startParsing(fileUrl));
+             dataFromParsing = new ArrayList<>(parser.startParsing(FileDownload.download(fileUrl)));
         } catch (IOException | ParseException e) {
             log.error(e.getMessage());
         }

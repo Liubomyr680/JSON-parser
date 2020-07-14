@@ -23,12 +23,10 @@ public class Parser {
         return fileCounter;
     }
 
-    public List<PermitForEmissionsOfPollutants> startParsing(String fileUrl) throws IOException, ParseException {
+    public List<PermitForEmissionsOfPollutants> startParsing(File file) throws IOException, ParseException {
 
         ParsingResponse parsingResponse = new ParsingResponse();
-        FileDownload.download(fileUrl);
-
-        FileReader reader = new FileReader(FileDownload.getTmpFile());
+        FileReader reader = new FileReader(file);
         JSONParser jsonParser = new JSONParser();
         JSONArray jsonArray = (JSONArray) jsonParser.parse(reader);
 
