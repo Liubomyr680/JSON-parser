@@ -16,7 +16,6 @@ import java.util.concurrent.TimeUnit;
 
 public class Parser {
 
-    private static final Logger log = LoggerFactory.getLogger(Parser.class);
     private int fileCounter;
 
     public int getFileCounter() {
@@ -30,7 +29,7 @@ public class Parser {
         JSONParser jsonParser = new JSONParser();
         JSONArray jsonArray = (JSONArray) jsonParser.parse(reader);
 
-        List<PermitForEmissionsOfPollutants> JsonList = new LinkedList<>();
+        List<PermitForEmissionsOfPollutants> jsonList = new LinkedList<>();
 
         Iterator i = jsonArray.iterator();
 
@@ -45,11 +44,11 @@ public class Parser {
             permit.setValidity(String.valueOf(innerObj.get("validity")));
             permit.setLegal_address(String.valueOf(innerObj.get("legal_address")));
             permit.setActual_address(String.valueOf(innerObj.get("actual_address")));
-            JsonList.add(permit);
+            jsonList.add(permit);
             fileCounter++;
         }
         parsingResponse.setFileRecordsCounter(fileCounter);
 
-        return JsonList;
+        return jsonList;
     }
 }

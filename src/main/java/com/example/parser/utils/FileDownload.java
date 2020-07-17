@@ -31,7 +31,7 @@ public class FileDownload {
                 bout.write(buffer,0,read);
 
         } catch (IOException e) {
-            log.error(e.getMessage());
+            log.error("Can't download file with url={}", fileUrl, e);
         } finally {
             try {
                 if (bout != null) {
@@ -39,7 +39,7 @@ public class FileDownload {
                     in.close();
                 }
             } catch (IOException e) {
-                log.error(e.getMessage());
+                log.error("Can't close stream", e);
             }
         }
 

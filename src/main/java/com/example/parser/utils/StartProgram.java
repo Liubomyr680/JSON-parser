@@ -18,7 +18,6 @@ public class StartProgram {
     private static final Logger log = LoggerFactory.getLogger(StartProgram.class);
 
     private PermitRepository permitRepository;
-    private int newRecordsCounter;
 
     public StartProgram(PermitRepository permitRepository) {
         this.permitRepository = permitRepository;
@@ -26,16 +25,19 @@ public class StartProgram {
 
     public ParsingResponse start(String fileUrl) {
 
+        int newRecordsCounter = 0;
         Parser parser = new Parser();
         ParsingResponse parsingResponse = new ParsingResponse();
         List<PermitForEmissionsOfPollutants> dataFromParsing = null;
 
         long start = System.currentTimeMillis();
+
         try {
              dataFromParsing = new ArrayList<>(parser.startParsing(FileDownload.download(fileUrl)));
         } catch (IOException | ParseException e) {
-            log.error(e.getMessage());
+            log.error("Parsing problem", e);
         }
+
         long end = System.currentTimeMillis();
         float time = TimeUnit.MILLISECONDS.toSeconds(end - start);
         parsingResponse.setTimeSpent(time);
@@ -43,14 +45,12 @@ public class StartProgram {
         parsingResponse.setFileDate(new Date());
         parsingResponse.setFileRecordsCounter(parser.getFileCounter());
 
-
         List<PermitForEmissionsOfPollutants> dataFromDB = new ArrayList<>(permitRepository.findAll());
-
         Set<PermitForEmissionsOfPollutants> union = new HashSet(dataFromParsing);
         union.removeAll(dataFromDB);
 
-        for (PermitForEmissionsOfPollutants k : union) {
-            permitRepository.save(k);
+        for (PermitForEmissionsOfPollutants newRecords : union) {
+            permitRepository.save(newRecords);
             newRecordsCounter++;
         }
 
