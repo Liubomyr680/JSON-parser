@@ -7,23 +7,24 @@ import lombok.Data;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Data
-public class StartProgram {
+@Service
+public class StartParsing {
 
-    private static final Logger log = LoggerFactory.getLogger(StartProgram.class);
-
+    private static final Logger log = LoggerFactory.getLogger(StartParsing.class);
     private PermitRepository permitRepository;
 
-    public StartProgram(PermitRepository permitRepository) {
+    public StartParsing(PermitRepository permitRepository) {
         this.permitRepository = permitRepository;
     }
 
-    public ParsingResponse start(String fileUrl) {
+    public ParsingResponse processData(String fileUrl) {
 
         int newRecordsCounter = 0;
         Parser parser = new Parser();
@@ -33,7 +34,7 @@ public class StartProgram {
         long start = System.currentTimeMillis();
 
         try {
-             dataFromParsing = new ArrayList<>(parser.startParsing(FileDownload.download(fileUrl)));
+             dataFromParsing = new ArrayList<>(parser.startParsingTheFile(FileDownload.download(fileUrl)));
         } catch (IOException | ParseException e) {
             log.error("Parsing problem", e);
         }

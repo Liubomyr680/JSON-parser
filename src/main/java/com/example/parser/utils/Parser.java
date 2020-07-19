@@ -22,7 +22,7 @@ public class Parser {
         return fileCounter;
     }
 
-    public List<PermitForEmissionsOfPollutants> startParsing(File file) throws IOException, ParseException {
+    public List<PermitForEmissionsOfPollutants> startParsingTheFile(File file) throws IOException, ParseException {
 
         ParsingResponse parsingResponse = new ParsingResponse();
         FileReader reader = new FileReader(file);
