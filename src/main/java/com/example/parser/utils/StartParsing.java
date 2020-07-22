@@ -1,7 +1,7 @@
 package com.example.parser.utils;
 
 import com.example.parser.dto.ParsingResponse;
-import com.example.parser.entity.PermitForEmissionsOfPollutants;
+import com.example.parser.entity.Permit;
 import com.example.parser.repository.PermitRepository;
 import lombok.Data;
 import org.json.simple.parser.ParseException;
@@ -29,7 +29,7 @@ public class StartParsing {
         int newRecordsCounter = 0;
         Parser parser = new Parser();
         ParsingResponse parsingResponse = new ParsingResponse();
-        List<PermitForEmissionsOfPollutants> dataFromParsing = null;
+        List<Permit> dataFromParsing = null;
 
         long start = System.currentTimeMillis();
 
@@ -46,11 +46,11 @@ public class StartParsing {
         parsingResponse.setFileDate(new Date());
         parsingResponse.setFileRecordsCounter(parser.getFileCounter());
 
-        List<PermitForEmissionsOfPollutants> dataFromDB = new ArrayList<>(permitRepository.findAll());
-        Set<PermitForEmissionsOfPollutants> union = new HashSet(dataFromParsing);
+        List<Permit> dataFromDB = new ArrayList<>(permitRepository.findAll());
+        Set<Permit> union = new HashSet(dataFromParsing);
         union.removeAll(dataFromDB);
 
-        for (PermitForEmissionsOfPollutants newRecords : union) {
+        for (Permit newRecords : union) {
             permitRepository.save(newRecords);
             newRecordsCounter++;
         }
