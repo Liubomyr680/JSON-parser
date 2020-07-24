@@ -1,4 +1,4 @@
-package com.example.parser.utils;
+package com.example.parser.service;
 
 import com.example.parser.entity.Permit;
 import com.example.parser.repository.PagingPermitRepository;

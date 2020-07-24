@@ -41,18 +41,11 @@
     </table>
 </div>
 
-<!--    <ul class="nav nav-pills">-->
-<!--        -->
-
-<!--    </ul>-->
-
 <span class="nav-item"
      th:each="i : ${#numbers.sequence(0, totalPages-1)}">
     <a th:href="@{/(page=${i})}" th:text="${i}"></a>
 
 </span>
-
-
 
 </body>
 </html>

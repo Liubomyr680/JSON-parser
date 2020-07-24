@@ -1,8 +1,10 @@
-package com.example.parser.utils;
+package com.example.parser.service;
 
 import com.example.parser.dto.ParsingResponse;
 import com.example.parser.entity.Permit;
 import com.example.parser.repository.PermitRepository;
+import com.example.parser.utils.FileDownload;
+import com.example.parser.utils.Parser;
 import lombok.Data;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
@@ -15,12 +17,12 @@ import java.util.concurrent.TimeUnit;
 
 @Data
 @Service
-public class StartParsing {
+public class StartParsingService {
 
-    private static final Logger log = LoggerFactory.getLogger(StartParsing.class);
+    private static final Logger log = LoggerFactory.getLogger(StartParsingService.class);
     private PermitRepository permitRepository;
 
-    public StartParsing(PermitRepository permitRepository) {
+    public StartParsingService(PermitRepository permitRepository) {
         this.permitRepository = permitRepository;
     }
 

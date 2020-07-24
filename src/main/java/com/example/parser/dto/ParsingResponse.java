@@ -1,7 +1,6 @@
 package com.example.parser.dto;
 
 import lombok.Data;
-import org.springframework.context.annotation.Scope;
 
 import java.util.Date;
 
