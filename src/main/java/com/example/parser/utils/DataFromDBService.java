@@ -20,8 +20,8 @@ public class DataFromDBService {
         this.pagingPermitRepository = pagingPermitRepository;
     }
 
-    public Page<Permit> listAll(){
-        Pageable pageable = PageRequest.of(0,10);
+    public Page<Permit> listAll(int page){
+        Pageable pageable = PageRequest.of(page,10);
         return pagingPermitRepository.findAll(pageable);
     }
 }

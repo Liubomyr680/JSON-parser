@@ -6,11 +6,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 
 @Repository
 public interface PermitRepository extends JpaRepository<Permit, Long> {
 
 //    PermitForEmissionsOfPollutants findByEdrpou(String edrpou);
 //    PermitForEmissionsOfPollutants findByNumber(String number);
-    Page<Permit> findAll(Pageable pageable);
+//    List<Permit> findAll();
 }

@@ -7,6 +7,8 @@ import com.example.parser.utils.DataFromDBService;
 import com.example.parser.utils.StartParsing;
 import lombok.SneakyThrows;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -24,23 +26,21 @@ public class ParserController {
         this.dataFromDBService = dataFromDB;
     }
 
-    @GetMapping("/data")
-    public ModelAndView dataPages(Model model) {
+    @GetMapping(value = "/")
+    public List<Permit> dataPages(Model model, @RequestParam(defaultValue = "0") int page) {
 
-        Page<Permit> page = dataFromDBService.listAll();
-        List<Permit> permitList = page.getContent();
+        Page<Permit> pageData = dataFromDBService.listAll(page);
+        List<Permit> permitList = pageData.getContent();
 
-        int totalRecords = page.getNumberOfElements();
-        int totalPages = page.getTotalPages();
+//        int totalPages = pageData.getTotalPages();
+//
+//        model.addAttribute("totalPages",totalPages);
+//        model.addAttribute("permitList", permitList);
+//
+//        ModelAndView modelAndView = new ModelAndView();
+//        modelAndView.setViewName("permit");
 
-        model.addAttribute("totalRecords",totalRecords);
-        model.addAttribute("totalPages",totalPages);
-        model.addAttribute("permitList", permitList);
-
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("permit.html");
-
-        return modelAndView;
+        return permitList;
     }
 
     @SneakyThrows
