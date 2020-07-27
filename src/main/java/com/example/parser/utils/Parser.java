@@ -10,7 +10,6 @@ import org.json.simple.parser.ParseException;
 import java.io.*;
 import java.util.*;
 
-
 public class Parser {
 
     private int fileCounter;

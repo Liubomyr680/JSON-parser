@@ -5,9 +5,8 @@ import com.example.parser.repository.PagingPermitRepository;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 @Data
 @Service
@@ -20,8 +19,16 @@ public class DataFromDBService {
         this.pagingPermitRepository = pagingPermitRepository;
     }
 
-    public Page<Permit> listAll(int page){
-        Pageable pageable = PageRequest.of(page,10);
+    public Page<Permit> listAll(Pageable pageable){
         return pagingPermitRepository.findAll(pageable);
     }
+
+    public Page<Permit> findById(Pageable pageable, int id){
+        return pagingPermitRepository.findById(pageable, id);
+    }
+
+    public Page<Permit> findByNumber(Pageable pageable, String number){
+        return pagingPermitRepository.findByNumber(pageable, number);
+    }
+
 }
