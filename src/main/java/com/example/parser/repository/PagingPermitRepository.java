@@ -13,10 +13,6 @@ public interface PagingPermitRepository extends PagingAndSortingRepository<Permi
 
     Page<Permit> findById(Pageable pageable, int id);
 
-//    @Query(value = "SELECT * FROM json_data WHERE number LIKE '123%'",
-//            nativeQuery = true)
-//    Page<Permit> findByNumber(Pageable pageable, String number);
-
     @Query(value = "SELECT * FROM json_data j WHERE j.number LIKE CONCAT('%',:number ,'%')",
             nativeQuery = true)
     Page<Permit> findByNumber(Pageable pageable, @Param("number") String number);
