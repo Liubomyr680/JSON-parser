@@ -1,18 +1,14 @@
 package com.example.parser.utils;
 
 import com.example.parser.dto.ParsingResponse;
-import com.example.parser.entity.PermitForEmissionsOfPollutants;
+import com.example.parser.entity.Permit;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
-
 
 public class Parser {
 
@@ -22,20 +18,20 @@ public class Parser {
         return fileCounter;
     }
 
-    public List<PermitForEmissionsOfPollutants> startParsingTheFile(File file) throws IOException, ParseException {
+    public List<Permit> startParsingTheFile(File file) throws IOException, ParseException {
 
         ParsingResponse parsingResponse = new ParsingResponse();
         FileReader reader = new FileReader(file);
         JSONParser jsonParser = new JSONParser();
         JSONArray jsonArray = (JSONArray) jsonParser.parse(reader);
 
-        List<PermitForEmissionsOfPollutants> jsonList = new LinkedList<>();
+        List<Permit> jsonList = new LinkedList<>();
 
         Iterator i = jsonArray.iterator();
 
         while (i.hasNext()) {
             JSONObject innerObj = (JSONObject) i.next();
-            PermitForEmissionsOfPollutants permit = new PermitForEmissionsOfPollutants();
+            Permit permit = new Permit();
 
             permit.setEdrpou(String.valueOf(innerObj.get("edrpou")));
             permit.setNumber(String.valueOf(innerObj.get("number")));

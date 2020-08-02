@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Permits</title>
+</head>
+<body>
+<div align="center">
+
+    <h1>Permits</h1>
+    <br/><br/>
+
+    <table border="1" cellpadding="10">
+
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Actual address</th>
+            <th>Data type</th>
+            <th>EDRPOU</th>
+            <th>Legal address</th>
+            <th>Name</th>
+            <th>Number</th>
+            <th>Validity</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="permit : ${permitList}">
+
+            <td th:text="${permit.id}"></td>
+            <td th:text="${permit.actual_address}"></td>
+            <td th:text="${permit.data_type}"></td>
+            <td th:text="${permit.edrpou}"></td>
+            <td th:text="${permit.legal_address}"></td>
+            <td th:text="${permit.name}"></td>
+            <td th:text="${permit.number}"></td>
+            <td th:text="${permit.validity}"></td>
+
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<span class="nav-item"
+     th:each="i : ${#numbers.sequence(0, totalPages-1)}">
+    <a th:href="@{/(page=${i})}" th:text="${i}"></a>
+
+</span>
+
+</body>
+</html>

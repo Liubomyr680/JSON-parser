@@ -13,7 +13,7 @@ import java.util.Objects;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PermitForEmissionsOfPollutants {
+public class Permit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -45,7 +45,7 @@ public class PermitForEmissionsOfPollutants {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PermitForEmissionsOfPollutants that = (PermitForEmissionsOfPollutants) o;
+        Permit that = (Permit) o;
         return Objects.equals(number, that.number);
     }
 
